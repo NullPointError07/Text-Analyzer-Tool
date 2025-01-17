@@ -1,0 +1,28 @@
+{
+  "name": "wsd",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "build": "npx tsc",
+    "start": "node dist/index.js",
+    "dev": "npx tsc && concurrently \"npx tsc -w\" \"nodemon dist/index.js\""
+  },
+  "keywords": [],
+  "author": "Md Taukir Alam",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "typescript": "^5.5.4"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/jest": "^29.5.14",
+    "@types/node": "^22.3.0",
+    "concurrently": "^8.2.2",
+    "jest": "^29.7.0",
+    "nodemon": "^3.1.4",
+    "ts-jest": "^29.2.5"
+  }
+}
