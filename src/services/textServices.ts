@@ -7,7 +7,12 @@ export const countCharacters = (text: string): number => {
 };
 
 export const countSentences = (text: string): number => {
-  return (text.match(/[.!?](?=\s|$)/g) || []).length;
+  return (
+    (text.match(/[.!?](?=\s|$)/g) || []).length +
+    (text.trim().endsWith(".") || text.trim().endsWith("?") || text.trim().endsWith("!") || text.trim() === ""
+      ? 0
+      : 1)
+  );
 };
 
 export const countParagraphs = (text: string): number => {

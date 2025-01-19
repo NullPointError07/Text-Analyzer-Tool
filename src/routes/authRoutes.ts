@@ -8,9 +8,18 @@ router.get("/google/callback", passport.authenticate("google", { failureRedirect
   res.redirect("/dashboard");
 });
 
+router.get("/login", (req, res) => {
+  res.render("index");
+});
+
 router.get("/logout", (req, res) => {
   req.logout((err) => {
-    res.redirect("/");
+    if (err) {
+      return res.redirect("/");
+    }
+    req.session.destroy(() => {
+      res.redirect("/");
+    });
   });
 });
 

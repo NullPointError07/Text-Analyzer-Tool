@@ -6,8 +6,10 @@ import session from "express-session";
 import textRoutes from "./routes/textRoutes";
 import authRoutes from "./routes/authRoutes";
 import dashboardRoutes from "./routes/dashboardRoutes";
-import "./auth/googleStrategy";
 import { connectDB } from "./db/connectDB";
+import { apiLimiter } from "./middleware/throttling";
+import { checkCache } from "./middleware/cacheFunc";
+import "./auth/googleStrategy";
 
 const app = express();
 dotenv.config();
@@ -29,6 +31,7 @@ app.use(
 );
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(apiLimiter);
 
 const port = process.env.PORT || 3000;
 
@@ -37,7 +40,7 @@ app.get("/", (req, res) => {
   res.render("index", { isAuthenticated });
 });
 
-app.use("/api", textRoutes);
+app.use("/api", checkCache, textRoutes);
 app.use("/auth", authRoutes);
 app.use("/dashboard", dashboardRoutes);
 

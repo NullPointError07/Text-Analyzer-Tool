@@ -2,81 +2,79 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body class="bg-gray-100 text-gray-800">
-    <!-- Navbar inclusion -->
-    <%- include('partials/navbar') %>
+<body class="bg-gray-100 text-gray-800 flex justify-center items-center min-h-screen">
+    <!-- Main Container -->
+    <div class="bg-white shadow-lg rounded-lg w-full max-w-4xl p-6">
+        <!-- Navbar inclusion -->
+        <%- include('partials/navbar') %>
 
-        <div class="container mx-auto mt-10">
-            <h1 class="text-3xl font-bold mb-4 text-center">Text Analyzer Dashboard</h1>
+            <h1 class="text-3xl font-bold text-center mb-6 mt-4">Text Analyzer Dashboard</h1>
 
             <!-- Text Input and Analyze Button -->
-            <div class="flex justify-center mb-4">
+            <div class="flex flex-col items-center space-y-4">
                 <input id="textInput" type="text" placeholder="Enter text to analyze"
-                    class="border-2 border-gray-300 rounded p-2 w-2/3 mr-4">
+                    class="border-2 border-gray-300 rounded-lg p-3 w-2/3 md:w-1/2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
+
                 <button id="analyzeButton"
-                    class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">Analyze</button>
+                    class="bg-blue-600 text-white py-2 px-6 rounded-lg hover:bg-blue-700 transition-all focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    Analyze
+                </button>
             </div>
 
-            <!-- Hidden box to show analysis results -->
             <div id="analysisResult"
-                class="hidden bg-green-100 border border-green-500 text-green-700 p-4 rounded mt-4">
-                <h2 class="font-bold">Analysis Results</h2>
-                <p><strong>Word Count:</strong> <span id="wordCount"></span></p>
-                <p><strong>Character Count:</strong> <span id="characterCount"></span></p>
-                <p><strong>Sentence Count:</strong> <span id="sentenceCount"></span></p>
-                <p><strong>Paragraph Count:</strong> <span id="paragraphCount"></span></p>
-                <p><strong>Longest Word:</strong> <span id="longestWord"></span></p>
+                class="hidden bg-green-100 border border-green-500 text-green-700 p-6 rounded-lg mt-6 shadow-md">
+                <h2 class="font-semibold text-xl mb-4">Analysis Results</h2>
+                <ul>
+                    <li><strong>Word Count:</strong> <span id="wordCount"></span></li>
+                    <li><strong>Character Count:</strong> <span id="characterCount"></span></li>
+                    <li><strong>Sentence Count:</strong> <span id="sentenceCount"></span></li>
+                    <li><strong>Paragraph Count:</strong> <span id="paragraphCount"></span></li>
+                    <li><strong>Longest Word:</strong> <span id="longestWord"></span></li>
+                </ul>
             </div>
-        </div>
+    </div>
 
-        <script>
-            // JavaScript to handle the analyze button and showing results
-            document.getElementById('analyzeButton').addEventListener('click', async function () {
-                const text = document.getElementById('textInput').value;
-                if (!text) {
-                    alert('Please enter some text to analyze.');
-                    return;
+    <script>
+        document.getElementById("analyzeButton").addEventListener("click", async function () {
+            const text = document.getElementById("textInput").value;
+            if (!text) {
+                alert("Please enter some text to analyze.");
+                return;
+            }
+
+            try {
+                const response = await fetch("/api/analyze", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ text }),
+                });
+
+                const result = await response.json();
+
+                if (result?.analysis) {
+                    document.getElementById("wordCount").innerText = result.analysis.wordCount;
+                    document.getElementById("characterCount").innerText = result.analysis.characterCount;
+                    document.getElementById("sentenceCount").innerText = result.analysis.sentenceCount;
+                    document.getElementById("paragraphCount").innerText = result.analysis.paragraphCount;
+                    document.getElementById("longestWord").innerText = result.analysis.longestWord;
+
+                    document.getElementById("analysisResult").classList.remove("hidden");
+                } else {
+                    alert("Error during analysis: " + result.error);
                 }
-
-                try {
-                    const response = await fetch('/api/analyze', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({ text }),
-                    });
-
-                    console.log('Response:', response);
-
-                    const result = await response.json();
-
-                    console.log('Result:', result);
-                    console.log('response.status:', response.status);
-
-                    if (response.status === 201) {
-                        // Show the analysis result box and populate it with data
-                        document.getElementById('wordCount').innerText = result.analysis.wordCount;
-                        document.getElementById('characterCount').innerText = result.analysis.characterCount;
-                        document.getElementById('sentenceCount').innerText = result.analysis.sentenceCount;
-                        document.getElementById('paragraphCount').innerText = result.analysis.paragraphCount;
-                        document.getElementById('longestWord').innerText = result.analysis.longestWord;
-
-                        document.getElementById('analysisResult').classList.remove('hidden');
-                    } else {
-                        alert('Error during analysis: ' + result.error);
-                    }
-                } catch (error) {
-                    alert('An error occurred while analyzing the text');
-                }
-            });
-        </script>
+            } catch (error) {
+                alert("An error occurred while analyzing the text");
+            }
+        });
+    </script>
 </body>
 
 </html>

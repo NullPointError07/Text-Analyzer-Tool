@@ -57,7 +57,6 @@ export const analyzeText = async (req: Request, res: Response) => {
   }
 
   try {
-    // Analyze the text
     const analysis = {
       wordCount: countWords(text),
       characterCount: countCharacters(text),

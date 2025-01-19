@@ -1,9 +1,9 @@
 import express from "express";
+import { ensureAuthenticated } from "../middleware/authMiddleware";
 
 const router = express.Router();
 
-// Dashboard route
-router.get("/", (req, res) => {
+router.get("/", ensureAuthenticated, (req, res) => {
   const isAuthenticated = req.isAuthenticated ? req.isAuthenticated() : false;
   res.render("dashboard", { isAuthenticated });
 });
