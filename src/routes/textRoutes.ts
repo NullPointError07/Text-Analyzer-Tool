@@ -5,6 +5,7 @@ import {
   getSentenceCount,
   getParagraphCount,
   getLongestWord,
+  analyzeText,
 } from "../controllers/textControllers";
 
 const router = Router();
@@ -14,5 +15,6 @@ router.post("/characters", getCharacterCount);
 router.post("/sentences", getSentenceCount);
 router.post("/paragraphs", getParagraphCount);
 router.post("/longest-word", getLongestWord);
+router.post("/analyze", analyzeText);
 
 export default router;

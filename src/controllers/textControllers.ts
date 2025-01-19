@@ -6,6 +6,7 @@ import {
   countParagraphs,
   findLongestWord,
 } from "../services/textServices";
+import Text from "../models/textModel";
 
 export const getWordCount = (req: Request, res: Response) => {
   const { text } = req.body;
@@ -45,4 +46,28 @@ export const getLongestWord = (req: Request, res: Response) => {
 
   const longestWord = findLongestWord(text);
   res.status(200).json({ longestWord });
+};
+
+export const analyzeText = async (req: Request, res: Response) => {
+  console.log("text", req.body.text);
+  const { text } = req.body;
+
+  if (!text) {
+    return res.status(400).json({ error: "Text is required" });
+  }
+
+  try {
+    // Analyze the text
+    const analysis = {
+      wordCount: countWords(text),
+      characterCount: countCharacters(text),
+      sentenceCount: countSentences(text),
+      paragraphCount: countParagraphs(text),
+      longestWord: findLongestWord(text),
+    };
+
+    res.status(201).json({ message: "Text analyzed and saved", analysis });
+  } catch (error) {
+    res.status(500).json({ error: "An error occurred during analysis" });
+  }
 };

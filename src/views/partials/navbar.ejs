@@ -1,0 +1,12 @@
+<nav class="bg-gray-800 text-white px-4 py-2 flex justify-between items-center">
+    <a href="/" class="text-xl font-bold">Text Analyzer</a>
+    <div>
+        <% if (isAuthenticated) { %>
+            <!-- If the user is authenticated, show logout button -->
+            <a href="/logout" class="px-4 py-2 bg-red-500 rounded hover:bg-red-600">Logout</a>
+            <% } else { %>
+                <!-- If the user is not authenticated, show login button -->
+                <a href="/auth/google" class="px-4 py-2 bg-blue-500 rounded hover:bg-blue-600">Login</a>
+                <% } %>
+    </div>
+</nav>
