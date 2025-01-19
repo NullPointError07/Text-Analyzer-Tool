@@ -49,7 +49,6 @@ export const getLongestWord = (req: Request, res: Response) => {
 };
 
 export const analyzeText = async (req: Request, res: Response) => {
-  console.log("text", req.body.text);
   const { text } = req.body;
 
   if (!text) {

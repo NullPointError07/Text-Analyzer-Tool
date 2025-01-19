@@ -6,7 +6,8 @@
     "clean": "rm -rf dist",
     "build": "npm run clean && tsc && cp -r src/views dist/src/views",
     "start": "node dist/src/index.js",
-    "dev": "npm run build && concurrently \"tsc -w\" \"nodemon dist/src/index.js\""
+    "dev": "npm run build && concurrently \"tsc -w\" \"nodemon dist/src/index.js\"",
+    "test": "jest --coverage"
   },
   "keywords": [],
   "author": "Md Taukir Alam",
